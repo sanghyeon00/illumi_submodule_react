@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
-
 import { BsSearch } from "react-icons/bs";
 
 // Styled components 
@@ -10,7 +9,7 @@ const HeaderWrapper = styled.header`
   align-items: center;
   justify-content: space-between;
   padding: 10px;
-  background-color: rgba(57, 57, 57, 0.64);
+  background-color: ${({ isTransparent }) => (isTransparent ? 'transparent' : 'rgba(57, 57, 57, 0.64)')};
   color: white;
   height: 74px;
   position: fixed;
@@ -18,7 +17,8 @@ const HeaderWrapper = styled.header`
   left: 0;
   width: 100%;
   z-index: 1000; 
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0);
+  transition: background-color 0.3s ease;
 `;
 
 const HeaderContainer = styled.div`
@@ -50,7 +50,7 @@ const NavLink = styled(Link)`
   color: white;
   text-decoration: none;
   font-size: 16px;
-  position: relative; 
+  position: relative;
   transition: color 0.3s ease;
 
   &:hover {
@@ -61,16 +61,16 @@ const NavLink = styled(Link)`
     content: '';
     position: absolute;
     left: 0;
-    bottom: -20px; 
+    bottom: -20px;
     width: 100%;
-    height: 2px; 
+    height: 2px;
     background-color: #e74c3c;
     transition: all 0.3s ease;
-    opacity: 0; 
+    opacity: 0;
   }
 
   &:hover::after {
-    opacity: 1; 
+    opacity: 1;
   }
 `;
 
@@ -80,8 +80,8 @@ const SearchForm = styled.form`
   background-color: white;
   border-radius: 20px;
   padding: 6px 10px;
-  margin-left:40px;
-  height:30px;
+  margin-left: 40px;
+  height: 30px;
 `;
 
 const SearchInput = styled.input`
@@ -107,12 +107,32 @@ const SearchButton = styled.button`
 `;
 
 const Spacer = styled.div`
-  height: 62px; 
+  height: 74px;
 `;
 
 const Header = () => {
+  const [isTransparent, setIsTransparent] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.pathname !== '/mainhomepage') {
+      setIsTransparent(false);
+      return;
+    }
+
+    const handleScroll = () => {
+      if (window.scrollY > 500) {
+        setIsTransparent(false);
+      } else {
+        setIsTransparent(true);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [location.pathname]);
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -126,17 +146,13 @@ const Header = () => {
 
     setSearchTerm('');
   };
-  
 
   return (
     <>
-      <HeaderWrapper>
+      <HeaderWrapper isTransparent={isTransparent}>
         <HeaderContainer>
-          <Logo href="http://127.0.0.1:5500/index.html">
-            <LogoImage
-              src="./imgs/illumi_logo_re-removebg-preview.png"
-              alt="Logo"
-            />
+          <Logo href="/mainhomepage">
+            <LogoImage src="./imgs/illumi_logo_re-removebg-preview.png" alt="Logo" />
           </Logo>
           <Nav>
             <NavLink to="/about">ABOUT</NavLink>

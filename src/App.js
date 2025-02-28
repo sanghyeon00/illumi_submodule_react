@@ -12,6 +12,7 @@ import Location from './component/Location';
 import Contact from './component/contact';
 import Projectpage from './component/projectpage';
 import Projectmain from './component/projectmain';
+import Mainhomepage from './component/Mainhomepage';
 
 function App() {
     return (
@@ -30,6 +31,7 @@ function App() {
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/project" element={<Projectpage />} />
                 <Route path="/projectmain" element={<Projectmain />} />
+                <Route path="/mainhomepage" element={<Mainhomepage />} />
             </Routes>
 
             <Footer/>

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled, { createGlobalStyle } from "styled-components";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const products = [ // Indoor product
   { id: 1, name: "DS-6401.1", power: "12W", image: "./imgs/proj1.png", tags: ["New", "Hot"] },
@@ -46,7 +46,9 @@ const out_products = [ // Outdoor product
 ];
 
 const Projectmain = () => {
-  const [selected, setSelected] = useState("Indoor");
+  const location = useLocation();
+
+  const [selected, setSelected] = useState(location.state?.selected || "Indoor");
 
   const [currentPage, setCurrentPage] = useState(0);
   const productsPerPage = 20;
